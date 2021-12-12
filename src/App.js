@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
 
 import "./App.css";
@@ -8,17 +9,31 @@ function Users() {
       res.json()
     )
   );
-  console.log(query);
+
+  const [search, setSearch] = useState("");
 
   return query.isSuccess ? (
-    <ol>
-      {query.data.map((user) => (
-        <li key={user.id}>
-          {user.name}
-          <span> @{user.username}</span>
-        </li>
-      ))}
-    </ol>
+    <>
+      <input
+        type="text"
+        placeholder="Search by user name..."
+        onChange={(event) => setSearch(event.target.value)}
+      ></input>
+      <ol>
+        {query.data
+          .filter(
+            (user) =>
+              search === "" ||
+              user.name.toLowerCase().includes(search.toLowerCase())
+          )
+          .map((user) => (
+            <li key={user.id}>
+              {user.name}
+              <span> @{user.username}</span>
+            </li>
+          ))}
+      </ol>
+    </>
   ) : (
     <h1>Loading...</h1>
   );
