@@ -1,31 +1,26 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+
 import "./App.css";
 
 function Users() {
-  const [users, setUsers] = useState([]);
+  const query = useQuery("users", () =>
+    fetch("https://jsonplaceholder.typicode.com/users").then((res) =>
+      res.json()
+    )
+  );
+  console.log(query);
 
-  const fetchUsers = () => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setUsers(data);
-      });
-  };
-
-  useEffect(() => {
-    fetchUsers();
-  });
-
-  return (
+  return query.isSuccess ? (
     <ol>
-      {users.map((user) => (
-        <li>
+      {query.data.map((user) => (
+        <li key={user.id}>
           {user.name}
           <span> @{user.username}</span>
         </li>
       ))}
     </ol>
+  ) : (
+    <h1>Loading...</h1>
   );
 }
 
