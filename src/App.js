@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
-
-import "./App.css";
+import "./App.scss";
 
 function Users() {
   const query = useQuery("users", () =>
@@ -13,13 +12,14 @@ function Users() {
   const [search, setSearch] = useState("");
 
   return query.isSuccess ? (
-    <>
+    <section>
+      <h1>Users List</h1>
       <input
         type="text"
         placeholder="Search by user name..."
         onChange={(event) => setSearch(event.target.value)}
       ></input>
-      <ol>
+      <ul>
         {query.data
           .filter(
             (user) =>
@@ -32,8 +32,8 @@ function Users() {
               <span> @{user.username}</span>
             </li>
           ))}
-      </ol>
-    </>
+      </ul>
+    </section>
   ) : (
     <h1>Loading...</h1>
   );
