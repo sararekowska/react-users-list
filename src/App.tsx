@@ -2,8 +2,14 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import "./App.scss";
 
+type User = {
+  id: number;
+  name: string;
+  username: string;
+};
+
 function Users() {
-  const query = useQuery("users", () =>
+  const query = useQuery<User[]>("users", () =>
     fetch("https://jsonplaceholder.typicode.com/users").then((res) =>
       res.json()
     )
@@ -22,11 +28,11 @@ function Users() {
       <ul>
         {query.data
           .filter(
-            (user) =>
+            (user: User) =>
               search === "" ||
               user.name.toLowerCase().includes(search.toLowerCase())
           )
-          .map((user) => (
+          .map((user: User) => (
             <li key={user.id}>
               {user.name}
               <span> @{user.username}</span>
